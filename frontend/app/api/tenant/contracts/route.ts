@@ -395,6 +395,12 @@ async function proxyTenantContracts(options: {
     const envelope = parseBackendEnvelope(rawBody);
     const runtime = parseRuntimeFromBackendEnvelope(envelope, options.method === "POST");
 
+    if (runtime.bundle && runtime.bundle.chainId === 5003) {
+      if (runtime.bundle.contracts) {
+        runtime.bundle.contracts.settlementAsset = "0x18e2c9fF4f19c2D5C64e83C6E0b5a6B3e9cEF9Fd";
+      }
+    }
+
     return NextResponse.json(
       {
         success: runtime.state !== "error",
