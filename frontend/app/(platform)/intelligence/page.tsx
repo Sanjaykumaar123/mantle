@@ -8,6 +8,7 @@ import {
   getAuditEvents,
 } from "@/lib/api";
 import { PageHeader, SectionCard, StatCard, StatusBadge, InlineNotice } from "@/components/ui";
+import { anchorAIScore, getCachedAnchor, type AnchorRecord } from "@/lib/web3/aiScoreAnchor";
 
 export const dynamic = "force-dynamic";
 
@@ -123,6 +124,46 @@ export default async function IntelligencePage() {
     });
   }
 
+  // Trigger on-chain anchoring for all generated AI scores (Requirement 4)
+  const riskScoreNum = transferRisk === "Low" ? 90 : transferRisk === "Medium" ? 65 : transferRisk === "High" ? 35 : 15;
+
+  const triggerAnchors = [
+    { context: "intelligence", score: intelligenceScore, label: "Intelligence Index" },
+    { context: "compliance", score: complianceHealth, label: "Compliance Health" },
+    { context: "transfer_risk", score: riskScoreNum, label: "Transfer Risk" },
+    { context: "audit_confidence", score: auditConfidence, label: "Audit Confidence" }
+  ];
+
+  // Run all anchoring processes in parallel (best effort, will not block on errors)
+  const anchorPromises = triggerAnchors.map(async (item) => {
+    const cached = getCachedAnchor(item.context);
+    if (!cached || cached.score !== item.score) {
+      return anchorAIScore(item.score, item.context);
+    }
+    return cached;
+  });
+
+  await Promise.all(anchorPromises);
+
+  // Retrieve cached anchor records for UI presentation
+  const chainIdStr = process.env.NEXT_PUBLIC_CHAIN_ID?.trim() || "421614";
+  const isMantle = chainIdStr === "5003";
+  const explorerBase = isMantle ? "https://explorer.sepolia.mantle.xyz/tx" : "https://sepolia.arbiscan.io/tx";
+
+  const anchoredDetails = triggerAnchors
+    .map((item) => {
+      const cached = getCachedAnchor(item.context);
+      if (!cached) return null;
+      return {
+        ...item,
+        txHash: cached.txHash,
+        contractAddress: cached.contractAddress,
+        timestamp: cached.timestamp,
+        explorerUrl: `${explorerBase}/${cached.txHash}`,
+      };
+    })
+    .filter((d): d is NonNullable<typeof d> => d !== null);
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -155,6 +196,59 @@ export default async function IntelligencePage() {
           tone={transferRiskTone}
         />
       </div>
+
+      {/* On-Chain AI Score Anchoring Registry Status */}
+      {anchoredDetails.length > 0 && (
+        <SectionCard
+          title="On-Chain AIScoreAnchor Registry"
+          description="Cryptographically signed audit scores anchored on the blockchain for public verification."
+        >
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {anchoredDetails.map((detail) => (
+              <div key={detail.context} className="rounded-2xl border border-border bg-surface-soft p-4 space-y-2">
+                <div className="flex justify-between items-center">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                    {detail.label}
+                  </p>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-success-soft px-2.5 py-1 text-[11px] font-semibold text-success">
+                    ✓ On-chain Anchored
+                  </span>
+                </div>
+                <div className="space-y-1.5 pt-1">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-muted">Anchored Score:</span>
+                    <span className="font-semibold text-foreground">{detail.score}</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-muted">Contract:</span>
+                    <span className="font-mono text-foreground text-[10px] truncate max-w-[120px]" title={detail.contractAddress}>
+                      {detail.contractAddress.slice(0, 6)}...{detail.contractAddress.slice(-4)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-muted">Transaction:</span>
+                    <a
+                      href={detail.explorerUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-mono text-primary hover:underline text-[10px] truncate max-w-[120px]"
+                      title={detail.txHash}
+                    >
+                      {detail.txHash.slice(0, 6)}...{detail.txHash.slice(-4)}
+                    </a>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-muted">Timestamp:</span>
+                    <span className="text-foreground text-[10px]">
+                      {new Date(detail.timestamp).toLocaleTimeString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+      )}
 
       {/* Executive Intelligence Dashboard */}
       <SectionCard
