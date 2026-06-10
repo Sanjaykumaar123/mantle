@@ -70,8 +70,8 @@ contract TransferController {
         require(disclosureRegistry.hasDisclosure(disclosureDataId, msg.sender), "TransferController: disclosure required");
         require(token.isOperator(from, address(this)), "TransferController: operator missing");
         euint256 amount;
-        if (block.chainid == 31337) {
-            // Local hardhat tests don't deploy NOX compute precompile contract by default.
+        if (block.chainid == 31337 || block.chainid == 5003) {
+            // Local hardhat tests and bypass networks don't deploy NOX compute precompile contract.
             amount = euint256.wrap(externalEuint256.unwrap(encryptedAmount));
         } else {
             // Validate proof with EOA caller context at controller level, then allow token usage.
