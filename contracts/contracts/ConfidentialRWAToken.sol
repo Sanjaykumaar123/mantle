@@ -35,7 +35,7 @@ contract ConfidentialRWAToken is ERC7984, Ownable {
         bytes calldata inputProof
     ) external onlyOwnerOrAuthorizedMinter returns (euint256) {
         euint256 amount;
-        if (block.chainid == 31337) {
+        if (block.chainid == 31337 || block.chainid == 5003) {
             amount = euint256.wrap(externalEuint256.unwrap(encryptedAmount));
         } else {
             amount = Nox.fromExternal(encryptedAmount, inputProof);
@@ -56,7 +56,7 @@ contract ConfidentialRWAToken is ERC7984, Ownable {
         bytes calldata inputProof
     ) external onlyOwnerOrAuthorizedMinter returns (euint256) {
         euint256 amount;
-        if (block.chainid == 31337) {
+        if (block.chainid == 31337 || block.chainid == 5003) {
             amount = euint256.wrap(externalEuint256.unwrap(encryptedAmount));
         } else {
             amount = Nox.fromExternal(encryptedAmount, inputProof);
@@ -69,5 +69,77 @@ contract ConfidentialRWAToken is ERC7984, Ownable {
         euint256 amount
     ) external onlyOwnerOrAuthorizedMinter returns (euint256) {
         return _burn(from, amount);
+    }
+
+    function confidentialTransfer(
+        address to,
+        externalEuint256 encryptedAmount,
+        bytes calldata inputProof
+    ) public override returns (euint256) {
+        euint256 amount;
+        if (block.chainid == 31337 || block.chainid == 5003) {
+            amount = euint256.wrap(externalEuint256.unwrap(encryptedAmount));
+        } else {
+            amount = Nox.fromExternal(encryptedAmount, inputProof);
+        }
+        return _transfer(msg.sender, to, amount);
+    }
+
+    function confidentialTransferFrom(
+        address from,
+        address to,
+        externalEuint256 encryptedAmount,
+        bytes calldata inputProof
+    ) public override returns (euint256) {
+        require(isOperator(from, msg.sender), ERC7984UnauthorizedSpender(from, msg.sender));
+        euint256 amount;
+        if (block.chainid == 31337 || block.chainid == 5003) {
+            amount = euint256.wrap(externalEuint256.unwrap(encryptedAmount));
+        } else {
+            amount = Nox.fromExternal(encryptedAmount, inputProof);
+        }
+        euint256 transferred = _transfer(from, to, amount);
+        if (block.chainid != 31337 && block.chainid != 5003) {
+            Nox.allowTransient(transferred, msg.sender);
+        }
+        return transferred;
+    }
+
+    function confidentialTransferAndCall(
+        address to,
+        externalEuint256 encryptedAmount,
+        bytes calldata inputProof,
+        bytes calldata data
+    ) public override returns (euint256 transferred) {
+        euint256 amount;
+        if (block.chainid == 31337 || block.chainid == 5003) {
+            amount = euint256.wrap(externalEuint256.unwrap(encryptedAmount));
+        } else {
+            amount = Nox.fromExternal(encryptedAmount, inputProof);
+        }
+        transferred = _transferAndCall(msg.sender, to, amount, data);
+        if (block.chainid != 31337 && block.chainid != 5003) {
+            Nox.allowTransient(transferred, msg.sender);
+        }
+    }
+
+    function confidentialTransferFromAndCall(
+        address from,
+        address to,
+        externalEuint256 encryptedAmount,
+        bytes calldata inputProof,
+        bytes calldata data
+    ) public override returns (euint256 transferred) {
+        require(isOperator(from, msg.sender), ERC7984UnauthorizedSpender(from, msg.sender));
+        euint256 amount;
+        if (block.chainid == 31337 || block.chainid == 5003) {
+            amount = euint256.wrap(externalEuint256.unwrap(encryptedAmount));
+        } else {
+            amount = Nox.fromExternal(encryptedAmount, inputProof);
+        }
+        transferred = _transferAndCall(from, to, amount, data);
+        if (block.chainid != 31337 && block.chainid != 5003) {
+            Nox.allowTransient(transferred, msg.sender);
+        }
     }
 }

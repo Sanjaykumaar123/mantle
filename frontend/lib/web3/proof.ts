@@ -165,6 +165,17 @@ export async function generateEncryptedAmountAndProof(
     };
   }
 
+  // Intercept bypass chains (Mantle Sepolia 5003 and Local Hardhat 31337)
+  if (request.chainId === 5003 || request.chainId === 31337) {
+    const amountHex = request.amount.toString(16).padStart(64, "0");
+    return {
+      ok: true,
+      adapter: "mock-nox-adapter",
+      encryptedAmount: `0x${amountHex}` as Hex,
+      inputProof: "0x" as Hex,
+    };
+  }
+
   if (!adapter) {
     return unavailableFailure(
       "Tidak ada adapter NOX yang di-pass ke helper untuk sesi wallet ini.",
