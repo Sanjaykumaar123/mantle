@@ -964,7 +964,7 @@ export default function OnboardingPage() {
       const signerBalance = await web3PublicClient.getBalance({ address });
       if (signerBalance <= BigInt(0)) {
         throw new Error(
-          `Connected wallet ${address} has 0 ETH on Arbitrum Sepolia. Fund it with test ETH before deploying the tenant bundle.`,
+          `Connected wallet ${address} has 0 MNT on Mantle Sepolia. Fund it with test MNT before deploying the tenant bundle.`,
         );
       }
 
@@ -1172,7 +1172,7 @@ export default function OnboardingPage() {
           <WizardStep
             step="Step 1"
             title="Connect wallet and switch chain"
-            description="Use an authenticated wallet session on Arbitrum Sepolia before any deployment or setup transaction."
+            description="Use an authenticated wallet session on Mantle Sepolia before any deployment or setup transaction."
             tone={address && onTargetChain ? "success" : "warning"}
           >
             <div className="grid gap-4 md:grid-cols-2">
@@ -1190,7 +1190,7 @@ export default function OnboardingPage() {
               <div className="rounded-2xl border border-border bg-surface-soft p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Network</p>
                 <p className="mt-2 text-sm text-foreground">
-                  {chainId ? `${chainId}${onTargetChain ? " (Arbitrum Sepolia)" : " (switch required)"}` : "Unknown"}
+                  {chainId ? `${chainId}${onTargetChain ? " (Mantle Sepolia)" : " (switch required)"}` : "Unknown"}
                 </p>
                 <Button
                   className="mt-4"
@@ -1198,7 +1198,7 @@ export default function OnboardingPage() {
                   onClick={() => void ensureTargetChain()}
                   disabled={!address || onTargetChain || activeAction !== null}
                 >
-                  {onTargetChain ? "Chain ready" : "Switch to Arbitrum Sepolia"}
+                  {onTargetChain ? "Chain ready" : "Switch to Mantle Sepolia"}
                 </Button>
               </div>
             </div>

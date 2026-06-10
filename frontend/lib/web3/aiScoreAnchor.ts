@@ -79,7 +79,7 @@ export function getCachedAnchor(context: string): AnchorRecord | null {
 
 export async function anchorAIScore(score: number, context: string): Promise<AnchorRecord | null> {
   try {
-    const chainIdStr = process.env.NEXT_PUBLIC_CHAIN_ID?.trim() || "421614";
+    const chainIdStr = process.env.NEXT_PUBLIC_CHAIN_ID?.trim() || "5003";
     const isMantle = chainIdStr === "5003";
 
     const rpcUrl = isMantle
@@ -127,7 +127,7 @@ export async function anchorAIScore(score: number, context: string): Promise<Anc
       `context: ${context}\n` +
       `txHash: ${receipt.hash}\n` +
       `contract: ${contractAddress}\n` +
-      `network: ${isMantle ? "mantleTestnet" : "arbitrumSepolia"}`
+      `network: ${isMantle ? "mantleSepolia" : "arbitrumSepolia"}`
     );
 
     return anchorInfo;

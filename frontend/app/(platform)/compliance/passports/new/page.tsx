@@ -361,7 +361,7 @@ export default function NewPassportPage() {
       return;
     }
     if (!onTargetChain) {
-      setError(`Wallet is on the wrong network. Switch to Arbitrum Sepolia (chain ID ${TARGET_CHAIN_ID}) first.`);
+      setError(`Wallet is on the wrong network. Switch to Mantle Sepolia (chain ID ${TARGET_CHAIN_ID}) first.`);
       return;
     }
     if (!runtimeContracts) {
@@ -692,7 +692,7 @@ export default function NewPassportPage() {
             <Button variant="secondary" href="/compliance/passports">Cancel</Button>
           </div>
           {!hasWallet ? <p className="text-sm text-danger">Wallet not connected.</p> : null}
-          {hasWallet && !onTargetChain ? <p className="text-sm text-danger">Wrong network. Use Arbitrum Sepolia.</p> : null}
+          {hasWallet && !onTargetChain ? <p className="text-sm text-danger">Wrong network. Use Mantle Sepolia.</p> : null}
           {!selectedTransferAmountBigInt && selectedTransfer ? <p className="text-sm text-danger">Selected transfer amount must be an integer to generate NOX proof.</p> : null}
           {!proofReadyForInput && selectedTransferAmountBigInt ? (
             <p className="text-sm text-danger">Browser-generated NOX proof is not ready for the current transfer amount.</p>

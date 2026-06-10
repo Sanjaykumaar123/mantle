@@ -137,9 +137,9 @@ export const organization = {
   environmentLabel: readRuntimeValue("NEXT_PUBLIC_ENVIRONMENT_LABEL", "Runtime environment"),
   networkName: readRuntimeValue(
     "NEXT_PUBLIC_NETWORK_NAME",
-    typeof process !== "undefined" && process.env.NEXT_PUBLIC_CHAIN_ID === "5003"
-      ? "Mantle Sepolia Testnet"
-      : "Arbitrum Sepolia"
+    typeof process !== "undefined" && process.env.NEXT_PUBLIC_CHAIN_ID === "421614"
+      ? "Arbitrum Sepolia"
+      : "Mantle Sepolia"
   ),
   supportEmail: readRuntimeValue("NEXT_PUBLIC_SUPPORT_EMAIL", "support@example.com"),
   healthStatus: readRuntimeValue("NEXT_PUBLIC_HEALTH_STATUS", "Live"),

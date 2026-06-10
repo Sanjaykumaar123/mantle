@@ -148,7 +148,7 @@ export default function NewDisclosurePage() {
     {
       label: "Network",
       ready: onTargetChain,
-      detail: onTargetChain ? "Arbitrum Sepolia active." : "Switch wallet to Arbitrum Sepolia.",
+      detail: onTargetChain ? "Mantle Sepolia active." : "Switch wallet to Mantle Sepolia.",
     },
     {
       label: "Grantee wallet",
@@ -460,7 +460,7 @@ export default function NewDisclosurePage() {
             <Button variant="secondary" href="/disclosures">Cancel</Button>
           </div>
           {!hasWallet ? <p className="text-sm text-danger">Wallet not connected.</p> : null}
-          {hasWallet && !onTargetChain ? <p className="text-sm text-danger">Wrong network. Use Arbitrum Sepolia.</p> : null}
+          {hasWallet && !onTargetChain ? <p className="text-sm text-danger">Wrong network. Use Mantle Sepolia.</p> : null}
         </div>
       </SectionCard>
       {error ? <InlineNotice title="Create disclosure failed" description={error} tone="danger" /> : null}

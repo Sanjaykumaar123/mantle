@@ -726,7 +726,7 @@ export default function NewTransferPage() {
       return;
     }
     if (!onTargetChain) {
-      setError(`Wallet is on the wrong network. Switch to Arbitrum Sepolia (chain ID ${TARGET_CHAIN_ID}) first.`);
+      setError(`Wallet is on the wrong network. Switch to Mantle Sepolia (chain ID ${TARGET_CHAIN_ID}) first.`);
       return;
     }
     if (!amountValid || amountBigInt === null) {
@@ -781,7 +781,7 @@ export default function NewTransferPage() {
       return;
     }
     if (!onTargetChain) {
-      setError(`Wallet is on the wrong network. Switch to Arbitrum Sepolia (chain ID ${TARGET_CHAIN_ID}) first.`);
+      setError(`Wallet is on the wrong network. Switch to Mantle Sepolia (chain ID ${TARGET_CHAIN_ID}) first.`);
       return;
     }
     if (!runtimeContracts) {
@@ -1606,7 +1606,7 @@ export default function NewTransferPage() {
             ) : null}
             {!hasConnectedWallet ? <p className="mt-3 text-sm text-danger">Wallet not connected. Connect wallet before transfer.</p> : null}
             {hasConnectedWallet && !onTargetChain ? (
-              <p className="mt-3 text-sm text-danger">Wrong network. Switch wallet to Arbitrum Sepolia (chain ID {TARGET_CHAIN_ID}).</p>
+              <p className="mt-3 text-sm text-danger">Wrong network. Switch wallet to Mantle Sepolia (chain ID {TARGET_CHAIN_ID}).</p>
             ) : null}
             {!sourceWalletValid && fromInvestor ? <p className="mt-3 text-sm text-danger">Sender investor must have a valid mapped wallet address.</p> : null}
             {sourceWalletValid && hasConnectedWallet && !sourceMatchesConnectedWallet ? (

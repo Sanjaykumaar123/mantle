@@ -239,7 +239,7 @@ export function getProofReadinessItems(input: ProofReadinessInput): ProofReadine
     {
       label: "Network",
       ready: input.onTargetChain,
-      detail: input.onTargetChain ? "Arbitrum Sepolia active." : "Switch wallet to Arbitrum Sepolia.",
+      detail: input.onTargetChain ? "Mantle Sepolia active." : "Switch wallet to Mantle Sepolia.",
     },
     {
       label: "Amount",

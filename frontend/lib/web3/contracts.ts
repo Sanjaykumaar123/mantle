@@ -114,8 +114,8 @@ export const tenantFactoryEnvConfigured = tenantFactoryEnvValue.length > 0;
 export const tenantFactoryEnvInvalid = tenantFactoryEnvConfigured && !tenantFactoryAddress;
 
 export const MANAGED_CONTRACT_LABEL = isMantleNetwork()
-  ? "Managed global demo contracts (Mantle Testnet)"
-  : "Managed global demo contracts (shared Arbitrum Sepolia)";
+  ? "Managed global demo contracts (Mantle Sepolia)"
+  : "Managed global demo contracts (Mantle Sepolia)";
 
 export function getManagedContractAddresses(): Record<CoreContractName, HexAddress> {
   return {

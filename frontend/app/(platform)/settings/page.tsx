@@ -164,7 +164,7 @@ export default function SettingsPage() {
             description="Configuration access is restricted to high-clearance roles. In backend implementation, all sensitive setting changes must always generate audit events."
           />
 
-          <SectionCard title="On-chain deployment" description="Arbitrum Sepolia contracts and ABI integration state for frontend runtime.">
+          <SectionCard title="On-chain deployment" description="Mantle Sepolia contracts and ABI integration state for frontend runtime.">
             <div className="space-y-4">
               <InlineNotice
                 title="Runtime source of truth"

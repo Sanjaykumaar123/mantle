@@ -113,7 +113,7 @@ export function decodeTransferControllerError(error: unknown): DecodedContractEr
       code: "CHAIN_MISMATCH",
       message: "Wallet berada di chain yang salah untuk transaksi ini.",
       detail: "Chain wallet tidak cocok dengan chain kontrak transfer confidential.",
-      action: "Switch wallet ke Arbitrum Sepolia lalu ulangi.",
+      action: "Switch wallet ke Mantle Sepolia lalu ulangi.",
       rawMessage,
       retryable: true,
     };

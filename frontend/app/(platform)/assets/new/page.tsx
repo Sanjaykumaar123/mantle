@@ -259,7 +259,7 @@ export default function NewAssetPage() {
       return;
     }
     if (!onTargetChain) {
-      setError("Switch wallet to Arbitrum Sepolia before generating issuance proof.");
+      setError("Switch wallet to Mantle Sepolia before generating issuance proof.");
       return;
     }
 
@@ -310,7 +310,7 @@ export default function NewAssetPage() {
       return;
     }
     if (!onTargetChain) {
-      setError("Switch wallet to Arbitrum Sepolia to match your tenant deployment.");
+      setError("Switch wallet to Mantle Sepolia to match your tenant deployment.");
       return;
     }
     if (!ownerWallet || address.toLowerCase() !== ownerWallet.toLowerCase()) {
@@ -527,7 +527,7 @@ export default function NewAssetPage() {
             </p>
             <p className="mt-1">
               Chain: <span className="font-mono text-foreground">{chainId ?? "unknown"}</span>
-              {!onTargetChain ? " (switch required to 421614)" : " (Arbitrum Sepolia)"}
+              {!onTargetChain ? " (switch required to 5003)" : " (Mantle Sepolia)"}
             </p>
             <p className="mt-1">
               Metadata URI used for anchor: <span className="font-mono text-foreground">{metadataUriTrimmed}</span>

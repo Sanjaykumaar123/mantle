@@ -26,7 +26,7 @@ const recordingSteps = [
     focus:
       "Pastikan audience melihat bahwa sender, recipient, asset, dan transfer record sudah berasal dari backend yang hidup.",
     show: [
-      "Asset demo: Demo Arbitrum Sepolia Treasury Note",
+      "Asset demo: Demo Mantle Sepolia Treasury Note",
       "Sender: Demo Sender SPV",
       "Recipient: Demo Recipient SPV",
       "Wallet sender dan recipient yang sudah termapping",
@@ -102,7 +102,7 @@ const recordingSteps = [
 
 const sceneChecklist = [
   "Gunakan wallet tenant yang sudah login dan sudah menyelesaikan onboarding bundle.",
-  "Pastikan jaringan wallet berada di Arbitrum Sepolia.",
+  "Pastikan jaringan wallet berada di Mantle Sepolia.",
   "Jangan tampilkan halaman kosong, mulai dari route yang sudah punya data tenant aktif.",
   "Kalau ingin demo aman, fokus ke flow live tenant: disclosure, transfer readiness, passport, audit.",
   "Siapkan browser dengan zoom 90-100% agar tabel tidak terpotong saat rekam.",
@@ -153,7 +153,7 @@ export default function DemoRecordingPage() {
           <DetailList
             columns={1}
             items={[
-              { label: "Asset demo", value: "Demo Arbitrum Sepolia Treasury Note" },
+              { label: "Asset demo", value: "Demo Mantle Sepolia Treasury Note" },
               { label: "Sender", value: "Demo Sender SPV" },
               { label: "Wallet sender", value: "0xEc08da877d409293C006523DB95BA291f43E3249" },
               { label: "Recipient", value: "Demo Recipient SPV" },

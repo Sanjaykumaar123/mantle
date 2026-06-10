@@ -16,7 +16,7 @@ const DEMO_SENDER_WALLET: &str = "0xec08da877d409293c006523db95ba291f43e3249";
 const DEMO_RECIPIENT_WALLET: &str = "0x1111111111111111111111111111111111111111";
 const DEMO_DISCLOSURE_TITLE: &str = "Demo Confidential Transfer Disclosure";
 const DEMO_DISCLOSURE_CONTENT: &str =
-    "Recording-ready disclosure grant for the seeded sender wallet on Arbitrum Sepolia.";
+    "Recording-ready disclosure grant for the seeded sender wallet on Mantle Sepolia.";
 const DEMO_DISCLOSURE_DATA_ID: &str =
     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const DEMO_DISCLOSURE_TX_HASH: &str =

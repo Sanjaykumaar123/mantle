@@ -80,7 +80,7 @@ export function WalletConnectButton({
   async function authenticateWallet(authAddress: string): Promise<void> {
     const provider = getProvider();
 
-    // 1. Ensure the wallet is on the correct network (Arbitrum Sepolia: 421614 / 0x66eee)
+    // 1. Ensure the wallet is on the correct network (Mantle Sepolia: 5003 / 0x138b)
     if (chainId !== TARGET_CHAIN_ID && provider) {
       try {
         console.log("[WalletConnectButton] Switching chain via provider...");
@@ -96,8 +96,19 @@ export function WalletConnectButton({
             await provider.request({
               method: "wallet_addEthereumChain",
               params: [
-                TARGET_CHAIN_ID === 5003
+                TARGET_CHAIN_ID === 421614
                   ? {
+                      chainId: TARGET_CHAIN_HEX,
+                      chainName: "Arbitrum Sepolia",
+                      rpcUrls: ["https://sepolia-rollup.arbitrum.io/rpc"],
+                      nativeCurrency: {
+                        name: "Ethereum",
+                        symbol: "ETH",
+                        decimals: 18,
+                      },
+                      blockExplorerUrls: ["https://sepolia.arbiscan.io"],
+                    }
+                  : {
                       chainId: TARGET_CHAIN_HEX,
                       chainName: "Mantle Sepolia Testnet",
                       rpcUrls: ["https://rpc.sepolia.mantle.xyz"],
@@ -108,17 +119,6 @@ export function WalletConnectButton({
                       },
                       blockExplorerUrls: ["https://sepolia.mantlescan.xyz"],
                     }
-                  : {
-                      chainId: TARGET_CHAIN_HEX,
-                      chainName: "Arbitrum Sepolia",
-                      rpcUrls: ["https://sepolia-rollup.arbitrum.io/rpc"],
-                      nativeCurrency: {
-                        name: "Ethereum",
-                        symbol: "ETH",
-                        decimals: 18,
-                      },
-                      blockExplorerUrls: ["https://sepolia.arbiscan.io"],
-                    },
               ],
             });
             console.log("[WalletConnectButton] Switching chain after adding...");

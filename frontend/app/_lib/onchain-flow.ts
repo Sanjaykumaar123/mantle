@@ -37,7 +37,7 @@ export function decodeWeb3FlowError<T>(
     return "Wallet request was rejected. Re-open the wallet prompt and approve the transaction to continue.";
   }
   if (lower.includes("switchchain") || lower.includes("wrong network") || lower.includes("chain mismatch")) {
-    return `Wallet is on the wrong network. Switch to Arbitrum Sepolia (chain ID ${TARGET_CHAIN_ID}) and retry.`;
+    return `Wallet is on the wrong network. Switch to Mantle Sepolia (chain ID ${TARGET_CHAIN_ID}) and retry.`;
   }
   if (lower.includes("insufficient funds")) {
     return "Connected wallet does not have enough gas to submit this transaction.";

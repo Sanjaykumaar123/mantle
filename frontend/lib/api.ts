@@ -369,7 +369,7 @@ function mapAsset(item: BackendAsset, viewerWallet: string | null): Asset {
     type: item.asset_type,
     status: "Active",
     issuer: item.issuance_wallet || "Tenant issuance wallet",
-    jurisdiction: "Arbitrum Sepolia",
+    jurisdiction: "Mantle Sepolia",
     holdersCount: 0,
     confidentialAum: 0,
     aumVisibility: walletMatches(item.issuance_wallet, viewerWallet) ? "Visible to owner" : "Restricted",
