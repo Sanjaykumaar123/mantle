@@ -897,7 +897,7 @@ export default function OnboardingPage() {
     setOnboarding((prev) => ({
       ...prev,
       legalEntityName: prev.legalEntityName || "Demo RWA Capital LLC",
-      regulatorLicense: prev.regulatorLicense || "DEMO-REG-421614",
+      regulatorLicense: prev.regulatorLicense || "DEMO-REG-5003",
       adminName: prev.adminName || "Demo Admin",
       adminEmail: prev.adminEmail || "admin@demo-rwa.example",
       treasuryWallet: prev.treasuryWallet || wallet,

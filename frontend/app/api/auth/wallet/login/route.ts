@@ -8,7 +8,7 @@ type WalletLoginRequest = {
 
 const TARGET_CHAIN_ID = typeof process !== "undefined" && process.env.NEXT_PUBLIC_CHAIN_ID
   ? Number(process.env.NEXT_PUBLIC_CHAIN_ID)
-  : 421614;
+  : 5003;
 
 function getBackendBaseUrl(): string {
   const base =

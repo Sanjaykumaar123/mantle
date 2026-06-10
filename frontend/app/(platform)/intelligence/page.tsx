@@ -146,7 +146,7 @@ export default async function IntelligencePage() {
   await Promise.all(anchorPromises);
 
   // Retrieve cached anchor records for UI presentation
-  const chainIdStr = process.env.NEXT_PUBLIC_CHAIN_ID?.trim() || "421614";
+  const chainIdStr = process.env.NEXT_PUBLIC_CHAIN_ID?.trim() || "5003";
   const isMantle = chainIdStr === "5003";
   const explorerBase = isMantle ? "https://explorer.sepolia.mantle.xyz/tx" : "https://sepolia.arbiscan.io/tx";
 

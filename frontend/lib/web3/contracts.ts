@@ -37,15 +37,14 @@ type ConfigValidation = {
   invalid: string[];
 };
 
-// ── Arbitrum Sepolia defaults (unchanged) ────────────────────────────────────
 const DEFAULTS = {
-  chainId: "421614",
-  rpcUrl: "https://sepolia-rollup.arbitrum.io/rpc",
+  chainId: "5003",
+  rpcUrl: "https://rpc.sepolia.mantle.xyz",
   addresses: {
-    confidentialRwaToken: "0x00094fc240029a342fB1152bBc7a15F73C7142C2",
-    disclosureRegistry: "0x5118aEC317dC21361Cad981944532F1f90D7aBb8",
-    transferController: "0x049B1712B9E624a01Eb4C40d10aBF42E89a14314",
-    auditAnchor: "0x79279257A998d3a5E26B70cb538b09fEe2f90174",
+    confidentialRwaToken: "0xED6f42b6129c13c0940043d0d7eaD700dd007756",
+    disclosureRegistry: "0x58c6f0792738e2A039B190714C2da12C787a20Ef",
+    transferController: "0x7C74B0175235A221a5A84a9A5756A74e1ccF5dE4",
+    auditAnchor: "0x90756BE272C8CB4a53a4A92117cA59dA92eC22C3",
   },
 } as const;
 
