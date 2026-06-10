@@ -6,33 +6,33 @@ const solutionCards = [
   {
     title: "Confidential Asset Management",
     description:
-      "Manage tokenized assets without exposing allocations, nominal values, or bilateral movement publicly.",
+      "Manage tokenized assets using AI-driven confidential asset intelligence without exposing allocations or bilateral movement publicly.",
     icon: "building" as const,
   },
   {
-    title: "Private Transfers",
+    title: "Private Transfers & Compliance",
     description:
-      "Transfers execute on-chain while amounts remain visible only to authorized stakeholders and relevant counterparties.",
+      "Transfers execute on-chain while AI-powered compliance analysis ensures validation without exposing private amounts.",
     icon: "lock" as const,
   },
   {
     title: "Selective Disclosure",
     description:
-      "Auditors, regulators, and operators access data according to explicit grants rather than the full ledger.",
+      "Auditors, regulators, and operators access explainable decision support and scopes according to explicit grants.",
     icon: "eye" as const,
   },
 ];
 
 const useCases = [
-  "Tokenized treasury unit allocation",
-  "Confidential fund subscription and redemption",
-  "Internal treasury movement with protected amount",
-  "Auditor review with role-scoped disclosure",
+  "AI-powered compliance analysis & asset monitoring",
+  "AI-generated institutional risk scoring & validation",
+  "AI-driven confidential asset intelligence & insights",
+  "Explainable decision support & automated compliance recommendations",
 ];
 
 const trustPillars = [
-  "Role-based access with explicit scope",
-  "Audit trail that still preserves privacy",
+  "AI-powered compliance analysis & validation",
+  "Verifiable on-chain attestations with Mantle AIScoreAnchor",
   "Institutional operating model with tenant-owned contracts",
 ];
 
@@ -50,7 +50,7 @@ export default function LandingPage() {
                 AEGIS AI
               </p>
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">
-                iExec NOX + ERC-7984 operating layer
+                AI-Powered Confidential Asset Infrastructure on Mantle
               </p>
             </div>
           </div>
@@ -82,15 +82,13 @@ export default function LandingPage() {
       <section className="relative px-4 pb-14 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:px-8 lg:pb-28 lg:pt-24">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.1fr_.9fr] lg:items-center">
           <div className="space-y-6 sm:space-y-8">
-            <StatusBadge tone="accent">iExec NOX Protocol + ERC-7984 confidential tokens</StatusBadge>
+            <StatusBadge tone="accent">AI Compliance + ERC-7984 Confidential Assets on Mantle</StatusBadge>
             <div className="space-y-4 sm:space-y-5">
               <h1 className="max-w-4xl text-3xl font-semibold tracking-tight text-foreground sm:text-4xl lg:text-6xl">
                 Confidential asset infrastructure for tokenized finance.
               </h1>
               <p className="max-w-2xl text-sm leading-7 text-muted sm:text-base sm:leading-8">
-                Manage assets and on-chain transfers without exposing nominal values, balances,
-                or allocations to the public. NOX proof generation, selective disclosure controls,
-                and tenant-owned contracts keep the flow verifiable without making amounts public.
+                Manage tokenized real-world assets using AI-powered intelligence, confidential ERC-7984 transfers, selective disclosure, and verifiable on-chain attestations—all secured on Mantle Sepolia.
               </p>
             </div>
             <div className="flex flex-wrap gap-4">
@@ -102,9 +100,9 @@ export default function LandingPage() {
               </Button>
             </div>
             <div className="flex flex-wrap gap-3">
-              <StatusBadge tone="success">{organization.networkName}</StatusBadge>
-              <StatusBadge tone="neutral">NOX proof generation</StatusBadge>
-              <StatusBadge tone="neutral">ERC-7984 confidential token flow</StatusBadge>
+              <StatusBadge tone="success">Built and Deployed on Mantle Sepolia Testnet</StatusBadge>
+              <StatusBadge tone="neutral">NOX-powered encrypted proof generation</StatusBadge>
+              <StatusBadge tone="neutral">ERC-7984 Confidential Asset Standard</StatusBadge>
               <StatusBadge tone="neutral">Selective disclosure by default</StatusBadge>
             </div>
           </div>
@@ -254,8 +252,7 @@ export default function LandingPage() {
                   <div className="space-y-1">
                     <p className="text-base font-semibold text-foreground">{pillar}</p>
                     <p className="text-sm leading-6 text-muted">
-                      Consistent IA, responsive shell, and reusable components keep the
-                      product credible from landing to settings.
+                      Ensures compliance and trust through automated recommendations and on-chain verification.
                     </p>
                   </div>
                 </div>
@@ -264,8 +261,8 @@ export default function LandingPage() {
           </SectionCard>
         </div>
       </section>
-
-      <section id="trust" className="px-4 pb-16 pt-6 sm:px-6 sm:pb-20 sm:pt-8 lg:px-8">
+ 
+      <section id="trust" className="space-y-6 px-4 pb-16 pt-6 sm:px-6 sm:pb-20 sm:pt-8 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-6 rounded-[2rem] border border-border bg-primary px-5 py-7 text-primary-foreground shadow-soft sm:px-6 sm:py-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div className="space-y-3">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/80">
@@ -288,6 +285,13 @@ export default function LandingPage() {
               Open dashboard
             </Button>
           </div>
+        </div>
+        <div className="mx-auto max-w-7xl">
+          <SectionCard title="AI Score Anchoring">
+            <p className="text-sm leading-6 text-muted">
+              Every AI-generated compliance and intelligence score is cryptographically anchored on Mantle through AIScoreAnchor, enabling publicly verifiable AI decisions without exposing confidential asset information.
+            </p>
+          </SectionCard>
         </div>
       </section>
     </main>
