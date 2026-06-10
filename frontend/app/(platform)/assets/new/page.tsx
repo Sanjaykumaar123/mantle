@@ -120,6 +120,7 @@ export default function NewAssetPage() {
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AssetCreationResult | null>(null);
+  const [proofSuccess, setProofSuccess] = useState<string | null>(null);
 
   const onTargetChain = chainId === TARGET_CHAIN_ID;
   const ownerWallet = runtime.bundle?.ownerWallet ?? null;
@@ -239,6 +240,7 @@ export default function NewAssetPage() {
 
   async function generateProof() {
     setError(null);
+    setProofSuccess(null);
 
     if (!proofInputKey) {
       setEncryptedAmount("");
@@ -265,6 +267,9 @@ export default function NewAssetPage() {
 
     setProofGenerating(true);
     try {
+      // Add a small artificial delay so that clicking the button gives visual feedback (spinner/disabled state)
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
       const generated = await generateEncryptedAmountAndProof(
         {
           amount: initialSupplyBigInt,
@@ -281,7 +286,7 @@ export default function NewAssetPage() {
       setEncryptedAmount(generated.encryptedAmount);
       setInputProof(generated.inputProof);
       setProofForKey(proofInputKey);
-      setSuccess(`NOX proof generated for confidential issuance via ${generated.adapter}.`);
+      setProofSuccess(`NOX proof generated for confidential issuance via ${generated.adapter}.`);
     } catch (proofError) {
       setProofForKey(null);
       setEncryptedAmount("");
@@ -296,6 +301,7 @@ export default function NewAssetPage() {
     setError(null);
     setSuccess(null);
     setResult(null);
+    setProofSuccess(null);
 
     if (!nameTrimmed) {
       setError("Asset name is required.");
@@ -533,6 +539,13 @@ export default function NewAssetPage() {
               Metadata URI used for anchor: <span className="font-mono text-foreground">{metadataUriTrimmed}</span>
             </p>
           </div>
+          {proofSuccess ? (
+            <InlineNotice
+              title="NOX Proof Ready"
+              description={proofSuccess}
+              tone="success"
+            />
+          ) : null}
           <div className="flex flex-wrap gap-3">
             <Button
               type="button"
