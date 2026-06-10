@@ -178,7 +178,7 @@ async fn wallet_challenge(
     State(state): State<AppState>,
     Json(payload): Json<WalletChallengeRequest>,
 ) -> (StatusCode, Json<ApiEnvelope<WalletChallengeResponse>>) {
-    if payload.chain_id != 421614 {
+    if payload.chain_id != 421614 && payload.chain_id != 5003 {
         return (
             StatusCode::BAD_REQUEST,
             Json(ApiEnvelope::err("unsupported chain id")),
@@ -219,7 +219,7 @@ async fn wallet_login(
     State(state): State<AppState>,
     Json(payload): Json<WalletLoginRequest>,
 ) -> (StatusCode, Json<ApiEnvelope<LoginResponse>>) {
-    if payload.chain_id != 421614 {
+    if payload.chain_id != 421614 && payload.chain_id != 5003 {
         return (
             StatusCode::BAD_REQUEST,
             Json(ApiEnvelope::err("unsupported chain id")),
