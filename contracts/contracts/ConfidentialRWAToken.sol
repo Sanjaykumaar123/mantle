@@ -2,8 +2,9 @@
 pragma solidity ^0.8.28;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {Nox, euint256, externalEuint256} from "@iexec-nox/nox-protocol-contracts/contracts/sdk/Nox.sol";
+import {Nox, euint256, externalEuint256, ebool} from "@iexec-nox/nox-protocol-contracts/contracts/sdk/Nox.sol";
 import {ERC7984} from "@iexec-nox/nox-confidential-contracts/contracts/token/ERC7984.sol";
+import {IERC7984Receiver} from "@iexec-nox/nox-confidential-contracts/contracts/interfaces/IERC7984Receiver.sol";
 
 /// @title ConfidentialRWAToken
 /// @notice Native confidential token based on iExec NOX ERC-7984 implementation.
@@ -111,15 +112,30 @@ contract ConfidentialRWAToken is ERC7984, Ownable {
         bytes calldata inputProof,
         bytes calldata data
     ) public override returns (euint256 transferred) {
-        euint256 amount;
         if (block.chainid == 31337 || block.chainid == 5003) {
-            amount = euint256.wrap(externalEuint256.unwrap(encryptedAmount));
+            euint256 amount = euint256.wrap(externalEuint256.unwrap(encryptedAmount));
+            transferred = _transfer(msg.sender, to, amount);
+            if (to.code.length > 0) {
+                try
+                    IERC7984Receiver(to).onConfidentialTransferReceived(msg.sender, msg.sender, amount, data)
+                returns (ebool retval) {
+                    bool success = ebool.unwrap(retval) != bytes32(0);
+                    if (!success) {
+                        _transfer(to, msg.sender, amount);
+                        transferred = euint256.wrap(bytes32(0));
+                    }
+                } catch (bytes memory reason) {
+                    if (reason.length == 0) {
+                        revert ERC7984InvalidReceiver(to);
+                    } else {
+                        assembly ("memory-safe") {
+                            revert(add(32, reason), mload(reason))
+                        }
+                    }
+                }
+            }
         } else {
-            amount = Nox.fromExternal(encryptedAmount, inputProof);
-        }
-        transferred = _transferAndCall(msg.sender, to, amount, data);
-        if (block.chainid != 31337 && block.chainid != 5003) {
-            Nox.allowTransient(transferred, msg.sender);
+            transferred = super.confidentialTransferAndCall(to, encryptedAmount, inputProof, data);
         }
     }
 
@@ -131,15 +147,67 @@ contract ConfidentialRWAToken is ERC7984, Ownable {
         bytes calldata data
     ) public override returns (euint256 transferred) {
         require(isOperator(from, msg.sender), ERC7984UnauthorizedSpender(from, msg.sender));
-        euint256 amount;
         if (block.chainid == 31337 || block.chainid == 5003) {
-            amount = euint256.wrap(externalEuint256.unwrap(encryptedAmount));
+            euint256 amount = euint256.wrap(externalEuint256.unwrap(encryptedAmount));
+            transferred = _transfer(from, to, amount);
+            if (to.code.length > 0) {
+                try
+                    IERC7984Receiver(to).onConfidentialTransferReceived(msg.sender, from, amount, data)
+                returns (ebool retval) {
+                    bool success = ebool.unwrap(retval) != bytes32(0);
+                    if (!success) {
+                        _transfer(to, from, amount);
+                        transferred = euint256.wrap(bytes32(0));
+                    }
+                } catch (bytes memory reason) {
+                    if (reason.length == 0) {
+                        revert ERC7984InvalidReceiver(to);
+                    } else {
+                        assembly ("memory-safe") {
+                            revert(add(32, reason), mload(reason))
+                        }
+                    }
+                }
+            }
         } else {
-            amount = Nox.fromExternal(encryptedAmount, inputProof);
+            transferred = super.confidentialTransferFromAndCall(from, to, encryptedAmount, inputProof, data);
         }
-        transferred = _transferAndCall(from, to, amount, data);
-        if (block.chainid != 31337 && block.chainid != 5003) {
-            Nox.allowTransient(transferred, msg.sender);
+    }
+
+    function _update(
+        address from,
+        address to,
+        euint256 amount
+    ) internal override returns (euint256 transferred) {
+        if (block.chainid == 31337 || block.chainid == 5003) {
+            ERC7984Storage storage $ = _getERC7984Storage();
+            uint256 cleanAmount = uint256(euint256.unwrap(amount));
+            
+            if (from == address(0)) {
+                // Mint
+                uint256 cleanTotalSupply = uint256(euint256.unwrap($._totalSupply));
+                $._totalSupply = euint256.wrap(bytes32(cleanTotalSupply + cleanAmount));
+            } else {
+                // Transfer/burn
+                uint256 cleanFromBalance = uint256(euint256.unwrap($._balances[from]));
+                require(cleanFromBalance >= cleanAmount, "ConfidentialRWAToken: insufficient balance");
+                $._balances[from] = euint256.wrap(bytes32(cleanFromBalance - cleanAmount));
+            }
+
+            transferred = amount;
+
+            if (to == address(0)) {
+                // Burn
+                uint256 cleanTotalSupply = uint256(euint256.unwrap($._totalSupply));
+                $._totalSupply = euint256.wrap(bytes32(cleanTotalSupply - cleanAmount));
+            } else {
+                // Mint/transfer
+                uint256 cleanToBalance = uint256(euint256.unwrap($._balances[to]));
+                $._balances[to] = euint256.wrap(bytes32(cleanToBalance + cleanAmount));
+            }
+            emit ConfidentialTransfer(from, to, transferred);
+        } else {
+            transferred = super._update(from, to, amount);
         }
     }
 }
