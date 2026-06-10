@@ -216,6 +216,53 @@ export async function GET(
       });
     }
 
+    if (kind === "intelligence-report") {
+      const [assets, investors, transfers, disclosures, passports] = await Promise.all([
+        fetchList<Asset>(`${backend}/assets`),
+        fetchList<Investor>(`${backend}/investors`),
+        fetchList<Transfer>(`${backend}/transfers`),
+        fetchList<Disclosure>(`${backend}/disclosures`),
+        fetchList<Passport>(`${backend}/compliance/passports`),
+      ]);
+
+      const globalObj = global as any;
+      const cache = globalObj.aiScoreAnchorsCache || {};
+
+      let reportText = "AEGIS AI - CONFIDENTIAL ASSET INTELLIGENCE AUDIT TRAIL REPORT\n";
+      reportText += `Generated at: ${new Date().toISOString()}\n`;
+      reportText += "Target Network: Mantle Sepolia Testnet (Chain ID 5003)\n\n";
+      reportText += "PLATFORM STATUS SUMMARY\n";
+      reportText += `Total Assets Tracked: ${assets.length}\n`;
+      reportText += `Total Registered Investors: ${investors.length}\n`;
+      reportText += `Total Transfers Executed: ${transfers.length}\n`;
+      reportText += `Active Disclosures: ${disclosures.length}\n`;
+      reportText += `Active Compliance Passports: ${passports.length}\n\n`;
+      reportText += "ON-CHAIN CRYPTOGRAPHIC ANCHORS\n";
+      
+      const entries = Object.entries(cache);
+      if (entries.length === 0) {
+        reportText += "No on-chain score anchors cached in memory for the current session.\n";
+      } else {
+        for (const [key, val] of entries) {
+          const details = val as any;
+          reportText += `Score Type: ${key.toUpperCase()}\n`;
+          reportText += `Assigned Score: ${details.score}\n`;
+          reportText += `Anchor Transaction: ${details.txHash || "Pending"}\n`;
+          reportText += `Contract Address: ${details.contractAddress || "Pending"}\n`;
+          reportText += `Anchored At: ${details.timestamp ? new Date(details.timestamp).toUTCString() : "Pending"}\n\n`;
+        }
+      }
+
+      return new NextResponse(reportText, {
+        status: 200,
+        headers: {
+          "content-type": "text/plain; charset=utf-8",
+          "content-disposition": 'attachment; filename="intelligence-audit-report.txt"',
+          "cache-control": "no-store",
+        },
+      });
+    }
+
     return NextResponse.json({ success: false, error: "Unknown export kind." }, { status: 404 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to export data.";

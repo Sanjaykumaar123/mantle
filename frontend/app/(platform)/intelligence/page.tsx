@@ -7,7 +7,7 @@ import {
   getCompliancePassports,
   getAuditEvents,
 } from "@/lib/api";
-import { PageHeader, SectionCard, StatCard, StatusBadge, InlineNotice } from "@/components/ui";
+import { Button, PageHeader, SectionCard, StatCard, StatusBadge, InlineNotice } from "@/components/ui";
 import { anchorAIScore, getCachedAnchor, type AnchorRecord } from "@/lib/web3/aiScoreAnchor";
 
 export const dynamic = "force-dynamic";
@@ -170,6 +170,9 @@ export default async function IntelligencePage() {
         eyebrow="Intelligence Center"
         title="Confidential Asset Intelligence"
         description="Explainable institutional insights for confidential real-world assets. Confidence, evidence, reasoning, and suggested actions accompany every insight."
+        actions={
+          <Button href="/api/exports/intelligence-report">Export Audit Trail</Button>
+        }
       />
 
       {/* Metric Cards Row */}
