@@ -271,23 +271,23 @@ function hasActiveDisclosureForViewer(
 
 type TransferRuntimeStatus = "Pending" | "Confirmed" | "Failed";
 
-function getArbitrumSepoliaRpcUrl(): string {
+function getMantleSepoliaRpcUrl(): string {
   const configured =
-    process.env.INTERNAL_ARBITRUM_SEPOLIA_RPC_URL?.trim() ||
-    process.env.NEXT_PUBLIC_ARBITRUM_SEPOLIA_RPC_URL?.trim() ||
-    process.env.ARBITRUM_SEPOLIA_RPC_URL?.trim() ||
+    process.env.INTERNAL_MANTLE_RPC_URL?.trim() ||
+    process.env.NEXT_PUBLIC_MANTLE_RPC_URL?.trim() ||
+    process.env.MANTLE_RPC_URL?.trim() ||
+    process.env.NEXT_PUBLIC_RPC_URL?.trim() ||
     "";
   if (configured) {
     return configured;
   }
-  return "https://sepolia-rollup.arbitrum.io/rpc";
+  return "https://rpc.sepolia.mantle.xyz";
 }
 
 const transferStatusClient = createPublicClient({
   transport: fallback([
-    http(getArbitrumSepoliaRpcUrl()),
-    http("https://arbitrum-sepolia-rpc.publicnode.com"),
-    http("https://arbitrum-sepolia.drpc.org"),
+    http(getMantleSepoliaRpcUrl()),
+    http("https://rpc.sepolia.mantle.xyz"),
   ]),
 });
 

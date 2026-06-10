@@ -51,12 +51,12 @@ if (typeof process !== "undefined" && process.env.NEXT_PUBLIC_MANTLE_RPC_URL) {
 mantleRpcUrls.push("https://rpc.sepolia.mantle.xyz");
 
 export const wagmiConfig = createConfig({
-  chains: [arbitrumSepolia, mantleSepoliaTestnet],
+  chains: [mantleSepoliaTestnet, arbitrumSepolia],
   connectors,
   storage: createStorage({ storage: noopStorage }),
   transports: {
-    [arbitrumSepolia.id]:        fallback(arbitrumRpcUrls.map((url) => http(url))),
     [mantleSepoliaTestnet.id]:   fallback(mantleRpcUrls.map((url) => http(url))),
+    [arbitrumSepolia.id]:        fallback(arbitrumRpcUrls.map((url) => http(url))),
   },
   ssr: true,
 });
