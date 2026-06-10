@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { WALLET_SESSION_COOKIE, parseWalletSession, getWalletSessionToken } from "@/lib/web3/session";
 
 type ApiEnvelope<T> = {
   success: boolean;
@@ -33,7 +35,19 @@ function getBackendBaseUrl(): string {
   return base.endsWith("/") ? base.slice(0, -1) : base;
 }
 
-function getAuthHeader(): Record<string, string> {
+async function getAuthHeader(): Promise<Record<string, string>> {
+  try {
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get(WALLET_SESSION_COOKIE)?.value ?? null;
+    const session = parseWalletSession(sessionCookie);
+    const token = getWalletSessionToken(session);
+    if (token) {
+      return { Authorization: `Bearer ${token}` };
+    }
+  } catch (error) {
+    console.error("[getAuthHeader] Failed to read session token from cookies:", error);
+  }
+
   const token =
     process.env.INTERNAL_API_AUTH_TOKEN?.trim() ||
     process.env.API_AUTH_TOKEN?.trim() ||
@@ -43,10 +57,11 @@ function getAuthHeader(): Record<string, string> {
 }
 
 async function fetchList<T>(url: string): Promise<T[]> {
+  const authHeader = await getAuthHeader();
   const response = await fetch(url, {
     headers: {
       Accept: "application/json",
-      ...getAuthHeader(),
+      ...authHeader,
     },
     cache: "no-store",
   });
