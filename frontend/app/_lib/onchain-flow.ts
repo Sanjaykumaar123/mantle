@@ -1,4 +1,6 @@
-export const TARGET_CHAIN_ID = 421614;
+export const TARGET_CHAIN_ID = typeof process !== "undefined" && process.env.NEXT_PUBLIC_CHAIN_ID
+  ? Number(process.env.NEXT_PUBLIC_CHAIN_ID)
+  : 421614;
 
 export type OptionalWeb3FlowAdapter<T> = {
   precheck?: (input: T) => Promise<T> | T;

@@ -1,5 +1,7 @@
 export const WALLET_SESSION_COOKIE = "rwaos_wallet_session";
-export const TARGET_CHAIN_ID = 421614;
+export const TARGET_CHAIN_ID = typeof process !== "undefined" && process.env.NEXT_PUBLIC_CHAIN_ID
+  ? Number(process.env.NEXT_PUBLIC_CHAIN_ID)
+  : 421614;
 const DEFAULT_MAX_AGE_SECONDS = 60 * 60 * 24;
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
 

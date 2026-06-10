@@ -6,7 +6,9 @@ type WalletLoginRequest = {
   signature: string;
 };
 
-const TARGET_CHAIN_ID = 421614;
+const TARGET_CHAIN_ID = typeof process !== "undefined" && process.env.NEXT_PUBLIC_CHAIN_ID
+  ? Number(process.env.NEXT_PUBLIC_CHAIN_ID)
+  : 421614;
 
 function getBackendBaseUrl(): string {
   const base =
@@ -56,7 +58,7 @@ function parseWalletLoginRequest(input: unknown): WalletLoginRequest {
     throw new Error("`chain_id` must be a positive integer.");
   }
   if (chainId !== TARGET_CHAIN_ID) {
-    throw new Error("`chain_id` must be Arbitrum Sepolia (421614).");
+    throw new Error(`\`chain_id\` must match the configured target network (chain ID ${TARGET_CHAIN_ID}).`);
   }
   if (!isLikelyWalletSignature(signature)) {
     throw new Error("`signature` must be a valid 65-byte hex signature.");

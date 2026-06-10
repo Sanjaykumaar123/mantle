@@ -5,7 +5,9 @@ type ChallengeRequest = {
   chain_id: number;
 };
 
-const TARGET_CHAIN_ID = 421614;
+const TARGET_CHAIN_ID = typeof process !== "undefined" && process.env.NEXT_PUBLIC_CHAIN_ID
+  ? Number(process.env.NEXT_PUBLIC_CHAIN_ID)
+  : 421614;
 
 function getBackendBaseUrl(): string {
   const base =
@@ -50,7 +52,7 @@ function parseChallengeRequest(input: unknown): ChallengeRequest {
     throw new Error("`chain_id` must be a positive integer.");
   }
   if (chainId !== TARGET_CHAIN_ID) {
-    throw new Error("`chain_id` must be Arbitrum Sepolia (421614).");
+    throw new Error(`\`chain_id\` must match the configured target network (chain ID ${TARGET_CHAIN_ID}).`);
   }
 
   return { address, chain_id: chainId };
