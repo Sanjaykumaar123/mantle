@@ -1,0 +1,22 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  env: {
+    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+    NEXT_PUBLIC_API_AUTH_TOKEN: process.env.NEXT_PUBLIC_API_AUTH_TOKEN,
+    NEXT_PUBLIC_CHAIN_ID: process.env.NEXT_PUBLIC_CHAIN_ID,
+    NEXT_PUBLIC_RPC_URL: process.env.NEXT_PUBLIC_RPC_URL,
+    NEXT_PUBLIC_CONTRACT_CONFIDENTIAL_RWA_TOKEN: process.env.NEXT_PUBLIC_CONTRACT_CONFIDENTIAL_RWA_TOKEN,
+    NEXT_PUBLIC_CONTRACT_DISCLOSURE_REGISTRY: process.env.NEXT_PUBLIC_CONTRACT_DISCLOSURE_REGISTRY,
+    NEXT_PUBLIC_CONTRACT_TRANSFER_CONTROLLER: process.env.NEXT_PUBLIC_CONTRACT_TRANSFER_CONTROLLER,
+    NEXT_PUBLIC_CONTRACT_AUDIT_ANCHOR: process.env.NEXT_PUBLIC_CONTRACT_AUDIT_ANCHOR,
+    NEXT_PUBLIC_CONTRACT_TENANT_FACTORY: process.env.NEXT_PUBLIC_CONTRACT_TENANT_FACTORY,
+  },
+  turbopack: {
+    resolveAlias: {
+      "@react-native-async-storage/async-storage": "./lib/empty-async-storage.js",
+    },
+  },
+};
+
+export default nextConfig;
