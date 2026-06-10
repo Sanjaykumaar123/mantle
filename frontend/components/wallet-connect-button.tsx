@@ -16,7 +16,7 @@ import {
   writeWalletSessionCookie,
 } from "@/lib/web3/session";
 
-const TARGET_CHAIN_HEX = "0x66eee";
+const TARGET_CHAIN_HEX = "0x" + TARGET_CHAIN_ID.toString(16);
 
 type Eip1193Provider = {
   request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
@@ -96,17 +96,29 @@ export function WalletConnectButton({
             await provider.request({
               method: "wallet_addEthereumChain",
               params: [
-                {
-                  chainId: TARGET_CHAIN_HEX,
-                  chainName: "Arbitrum Sepolia",
-                  rpcUrls: ["https://sepolia-rollup.arbitrum.io/rpc"],
-                  nativeCurrency: {
-                    name: "Ethereum",
-                    symbol: "ETH",
-                    decimals: 18,
-                  },
-                  blockExplorerUrls: ["https://sepolia.arbiscan.io"],
-                },
+                TARGET_CHAIN_ID === 5003
+                  ? {
+                      chainId: TARGET_CHAIN_HEX,
+                      chainName: "Mantle Sepolia Testnet",
+                      rpcUrls: ["https://rpc.sepolia.mantle.xyz"],
+                      nativeCurrency: {
+                        name: "Mantle",
+                        symbol: "MNT",
+                        decimals: 18,
+                      },
+                      blockExplorerUrls: ["https://sepolia.mantlescan.xyz"],
+                    }
+                  : {
+                      chainId: TARGET_CHAIN_HEX,
+                      chainName: "Arbitrum Sepolia",
+                      rpcUrls: ["https://sepolia-rollup.arbitrum.io/rpc"],
+                      nativeCurrency: {
+                        name: "Ethereum",
+                        symbol: "ETH",
+                        decimals: 18,
+                      },
+                      blockExplorerUrls: ["https://sepolia.arbiscan.io"],
+                    },
               ],
             });
             console.log("[WalletConnectButton] Switching chain after adding...");
