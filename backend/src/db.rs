@@ -6,8 +6,8 @@ use crate::{
     transfer_ops::CreateTransferRequest,
 };
 
-const DEMO_ASSET_NAME: &str = "Demo Arbitrum Sepolia Treasury Note";
-const DEMO_ASSET_TYPE: &str = "debt";
+const DEMO_ASSET_NAME: &str = "Ondo USD Yield (USDY)";
+const DEMO_ASSET_TYPE: &str = "yield-token";
 const DEMO_SENDER_NAME: &str = "Demo Sender SPV";
 const DEMO_RECIPIENT_NAME: &str = "Demo Recipient SPV";
 const DEMO_SENDER_JURISDICTION: &str = "US";
@@ -389,16 +389,16 @@ async fn seed_if_empty(pool: &PgPool) -> Result<(), sqlx::Error> {
             "INSERT INTO assets (institution_id, name, asset_type) VALUES ($1, $2, $3), ($1, $4, $5), ($1, $6, $7), ($1, $8, $9), ($1, $10, $11)",
         )
             .bind(default_institution_id)
-            .bind("Atlas Infrastructure Fund")
+            .bind("Mantle USDY Treasury Fund")
             .bind("fund")
-            .bind("GreenGrid Bond Series")
-            .bind("debt")
-            .bind("Meridian Logistics Equity")
-            .bind("equity")
-            .bind("Solaris Revenue Share")
-            .bind("revenue-share")
-            .bind("NorthPort Treasury Notes")
-            .bind("debt")
+            .bind("mETH Liquid Yield Strategy")
+            .bind("yield-strategy")
+            .bind("Ondo USD Yield (USDY)")
+            .bind("yield-token")
+            .bind("Mantle Staked ETH (mETH)")
+            .bind("liquid-staking")
+            .bind("Mantle Yield Index Fund")
+            .bind("fund")
             .execute(pool)
             .await?;
     }
