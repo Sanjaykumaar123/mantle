@@ -47,7 +47,9 @@ contract SettlementVault is ReentrancyGuard {
 
         settlementAsset.safeTransferFrom(msg.sender, address(this), publicAmount);
         euint256 amount = _toVaultAmount(encryptedAmount, inputProof);
-        Nox.allowTransient(amount, address(confidentialToken));
+        if (block.chainid != 31337 && block.chainid != 5003) {
+            Nox.allowTransient(amount, address(confidentialToken));
+        }
         minted = confidentialToken.mint(msg.sender, amount);
 
         emit DepositedAndMinted(msg.sender, publicAmount, externalEuint256.unwrap(encryptedAmount));
@@ -61,7 +63,9 @@ contract SettlementVault is ReentrancyGuard {
         require(publicAmount > 0, "SettlementVault: zero amount");
 
         euint256 amount = _toVaultAmount(encryptedAmount, inputProof);
-        Nox.allowTransient(amount, address(confidentialToken));
+        if (block.chainid != 31337 && block.chainid != 5003) {
+            Nox.allowTransient(amount, address(confidentialToken));
+        }
         burned = confidentialToken.burn(msg.sender, amount);
         settlementAsset.safeTransfer(msg.sender, publicAmount);
 
@@ -76,7 +80,7 @@ contract SettlementVault is ReentrancyGuard {
         externalEuint256 encryptedAmount,
         bytes calldata inputProof
     ) private returns (euint256) {
-        if (block.chainid == 31337) {
+        if (block.chainid == 31337 || block.chainid == 5003) {
             return euint256.wrap(externalEuint256.unwrap(encryptedAmount));
         }
         return Nox.fromExternal(encryptedAmount, inputProof);
