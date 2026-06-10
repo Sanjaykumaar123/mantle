@@ -1,9 +1,11 @@
-import { ethers } from "hardhat";
+import { ethers, network } from "hardhat";
 
 async function main() {
   const [deployer] = await ethers.getSigners();
   console.log(`Deploying with: ${deployer.address}`);
+  console.log(`Network:        ${network.name} (chainId: ${(await ethers.provider.getNetwork()).chainId})`);
 
+  // ── Existing contracts – unchanged ───────────────────────────────────────
   const tokenFactory = await ethers.getContractFactory("ConfidentialRWAToken");
   const token = await tokenFactory.deploy();
   await token.waitForDeployment();
@@ -20,13 +22,20 @@ async function main() {
   const auditAnchor = await auditFactory.deploy(deployer.address);
   await auditAnchor.waitForDeployment();
 
+  // ── New: AIScoreAnchor – Mantle Turing Test compliance ───────────────────
+  const aiScoreFactory = await ethers.getContractFactory("AIScoreAnchor");
+  const aiScoreAnchor = await aiScoreFactory.deploy(deployer.address);
+  await aiScoreAnchor.waitForDeployment();
+
   console.log("ConfidentialRWAToken:", await token.getAddress());
-  console.log("DisclosureRegistry:", await disclosureRegistry.getAddress());
-  console.log("TransferController:", await transferController.getAddress());
-  console.log("AuditAnchor:", await auditAnchor.getAddress());
+  console.log("DisclosureRegistry:  ", await disclosureRegistry.getAddress());
+  console.log("TransferController:  ", await transferController.getAddress());
+  console.log("AuditAnchor:         ", await auditAnchor.getAddress());
+  console.log("AIScoreAnchor:       ", await aiScoreAnchor.getAddress());
 }
 
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
+

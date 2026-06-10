@@ -128,3 +128,75 @@ docker compose stop
 ## Public Repository Notes
 
 This public repo intentionally excludes internal planning documents, Stitch design exports, local `.env` files, and private proof notes. The code, public examples, Docker setup, and contract ABIs needed to build and run the MVP are included.
+
+---
+
+## Mantle Testnet Deployment
+
+AEGIS AI supports **Mantle Testnet** (chainId `5003`) as a second deploy target alongside the existing Arbitrum Sepolia configuration.
+
+### Network Details
+
+| Property | Value |
+|----------|-------|
+| Network Name | Mantle Sepolia Testnet |
+| Chain ID | `5003` |
+| RPC URL | `https://rpc.sepolia.mantle.xyz` |
+| Block Explorer | `https://sepolia.mantlescan.xyz` |
+| Native Token | `MNT` |
+
+### Environment Variables
+
+Add the following to `contracts/.env` (do not remove existing Arbitrum vars):
+
+```text
+MANTLE_TESTNET_RPC_URL=https://rpc.sepolia.mantle.xyz
+PRIVATE_KEY=0xYOUR_PRIVATE_KEY
+```
+
+For the frontend (`frontend/.env.local`), to run against Mantle:
+
+```text
+NEXT_PUBLIC_CHAIN_ID=5003
+NEXT_PUBLIC_RPC_URL=https://rpc.sepolia.mantle.xyz
+NEXT_PUBLIC_CONTRACT_CONFIDENTIAL_RWA_TOKEN=0xYOUR_MANTLE_ADDRESS
+NEXT_PUBLIC_CONTRACT_DISCLOSURE_REGISTRY=0xYOUR_MANTLE_ADDRESS
+NEXT_PUBLIC_CONTRACT_TRANSFER_CONTROLLER=0xYOUR_MANTLE_ADDRESS
+NEXT_PUBLIC_CONTRACT_AUDIT_ANCHOR=0xYOUR_MANTLE_ADDRESS
+```
+
+Leave those vars unset (or keep Arbitrum values) to continue using Arbitrum Sepolia.
+
+### Deploy Contracts to Mantle Testnet
+
+```bash
+cd contracts
+cp .env.example .env
+# Edit .env – add PRIVATE_KEY and optionally MANTLE_TESTNET_RPC_URL
+
+# Compile
+npm run compile
+
+# Deploy all contracts including AIScoreAnchor
+npx hardhat run scripts/deploy.ts --network mantleTestnet
+```
+
+The output will print all deployed addresses. Copy them into your frontend `.env.local`.
+
+### AIScoreAnchor – On-Chain AI Score Anchoring
+
+A new `AIScoreAnchor` contract is deployed alongside the existing contracts. It receives the final AI-generated score from the Intelligence Center for on-chain verification:
+
+```solidity
+// Store an AI score (0-100) on-chain
+storeAIScore(uint256 score, string calldata context)
+
+// e.g. context = "intelligence" | "compliance" | "transfer_risk"
+```
+
+This does **not** replace off-chain AI computation — the score is computed in the Intelligence Center as before, and only the final result is anchored for transparency.
+
+### Existing Arbitrum Deployment
+
+All existing Arbitrum Sepolia contracts and configuration remain unchanged. No migration required.
+

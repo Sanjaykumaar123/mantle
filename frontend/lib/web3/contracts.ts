@@ -37,6 +37,7 @@ type ConfigValidation = {
   invalid: string[];
 };
 
+// ── Arbitrum Sepolia defaults (unchanged) ────────────────────────────────────
 const DEFAULTS = {
   chainId: "421614",
   rpcUrl: "https://sepolia-rollup.arbitrum.io/rpc",
@@ -47,6 +48,16 @@ const DEFAULTS = {
     auditAnchor: "0x79279257A998d3a5E26B70cb538b09fEe2f90174",
   },
 } as const;
+
+// ── Mantle Testnet defaults (additive – populated after deployment) ───────────
+export const MANTLE_TESTNET_CHAIN_ID = "5003";
+export const MANTLE_TESTNET_RPC_URL  = "https://rpc.sepolia.mantle.xyz";
+
+/** Returns true when the app is configured to run against Mantle Testnet. */
+export function isMantleNetwork(): boolean {
+  const chainId = process.env.NEXT_PUBLIC_CHAIN_ID?.trim();
+  return chainId === MANTLE_TESTNET_CHAIN_ID;
+}
 
 function readEnv(name: string, fallback: string): string {
   const value = process.env[name];
@@ -102,7 +113,9 @@ export const tenantFactoryAddress: HexAddress | null = isHexAddress(tenantFactor
 export const tenantFactoryEnvConfigured = tenantFactoryEnvValue.length > 0;
 export const tenantFactoryEnvInvalid = tenantFactoryEnvConfigured && !tenantFactoryAddress;
 
-export const MANAGED_CONTRACT_LABEL = "Managed global demo contracts (shared Arbitrum Sepolia)";
+export const MANAGED_CONTRACT_LABEL = isMantleNetwork()
+  ? "Managed global demo contracts (Mantle Testnet)"
+  : "Managed global demo contracts (shared Arbitrum Sepolia)";
 
 export function getManagedContractAddresses(): Record<CoreContractName, HexAddress> {
   return {
