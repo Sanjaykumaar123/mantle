@@ -86,6 +86,13 @@ contract ConfidentialRWAToken is ERC7984, Ownable {
         return _transfer(msg.sender, to, amount);
     }
 
+    function confidentialTransfer(
+        address to,
+        euint256 amount
+    ) public override returns (euint256) {
+        return _transfer(msg.sender, to, amount);
+    }
+
     function confidentialTransferFrom(
         address from,
         address to,
@@ -99,6 +106,19 @@ contract ConfidentialRWAToken is ERC7984, Ownable {
         } else {
             amount = Nox.fromExternal(encryptedAmount, inputProof);
         }
+        euint256 transferred = _transfer(from, to, amount);
+        if (block.chainid != 31337 && block.chainid != 5003) {
+            Nox.allowTransient(transferred, msg.sender);
+        }
+        return transferred;
+    }
+
+    function confidentialTransferFrom(
+        address from,
+        address to,
+        euint256 amount
+    ) public override returns (euint256) {
+        require(isOperator(from, msg.sender), ERC7984UnauthorizedSpender(from, msg.sender));
         euint256 transferred = _transfer(from, to, amount);
         if (block.chainid != 31337 && block.chainid != 5003) {
             Nox.allowTransient(transferred, msg.sender);
