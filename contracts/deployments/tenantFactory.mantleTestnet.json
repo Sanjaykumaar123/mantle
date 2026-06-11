@@ -3,7 +3,7 @@
   "chainId": 5003,
   "deployer": "0xE92930A61531e26D6B1EC3Ea7D434989Ab56982C",
   "contracts": {
-    "TenantFactory": "0x570ada2DbeDED6b1997350e04b0E9915776d6C7b"
+    "TenantFactory": "0xbb97355Bbd56Cbc39DA2000E73162671C90c0186"
   },
-  "timestamp": "2026-06-10T10:49:04.738Z"
+  "timestamp": "2026-06-11T04:17:20.488Z"
 }

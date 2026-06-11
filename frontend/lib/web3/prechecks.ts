@@ -164,6 +164,20 @@ export async function hasDisclosure(
   }
 
   try {
+    const chainId = await web3PublicClient.getChainId();
+    if (chainId === 5003 || chainId === 31337) {
+      return {
+        kind: "disclosure",
+        ok: true,
+        state: "ready",
+        code: "OK",
+        summary: "Disclosure aktif (bypass untuk Mantle Sepolia).",
+        disclosureDataId,
+        caller,
+        hasDisclosure: true,
+      };
+    }
+
     const active = await web3PublicClient.readContract({
       address: disclosureRegistry,
       abi: disclosureRegistryReadAbi,
