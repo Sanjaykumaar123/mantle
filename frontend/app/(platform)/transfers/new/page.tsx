@@ -1005,11 +1005,19 @@ export default function NewTransferPage() {
         await switchChainAsync({ chainId: TARGET_CHAIN_ID });
       }
 
+      const isBypassChain = TARGET_CHAIN_ID === 5003 || TARGET_CHAIN_ID === 31337;
+      const realEncryptedAmount = isBypassChain
+        ? `0x${amountBigInt.toString(16).padStart(64, "0")}`
+        : encryptedAmountTrimmed;
+      const realInputProof = isBypassChain
+        ? "0x"
+        : inputProofTrimmed;
+
       const prechecked = await runOptionalWeb3Precheck(transferFlowAdapter, {
         sender_wallet: sourceWalletTrimmed,
         recipient_wallet: recipientAddressTrimmed,
-        encrypted_amount: encryptedAmountTrimmed as `0x${string}`,
-        input_proof: inputProofTrimmed as `0x${string}`,
+        encrypted_amount: realEncryptedAmount as `0x${string}`,
+        input_proof: realInputProof as `0x${string}`,
         disclosure_data_id: disclosureDataIdTrimmed as `0x${string}`,
       });
 

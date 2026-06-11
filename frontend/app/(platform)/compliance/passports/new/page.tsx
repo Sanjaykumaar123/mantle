@@ -462,11 +462,19 @@ export default function NewPassportPage() {
         await switchChainAsync({ chainId: TARGET_CHAIN_ID });
       }
 
+      const isBypassChain = TARGET_CHAIN_ID === 5003 || TARGET_CHAIN_ID === 31337;
+      const realEncryptedAmount = isBypassChain
+        ? `0x${selectedTransferAmountBigInt!.toString(16).padStart(64, "0")}`
+        : encryptedAmountTrimmed;
+      const realInputProof = isBypassChain
+        ? "0x"
+        : inputProofTrimmed;
+
       const prechecked = await runOptionalWeb3Precheck(passportFlowAdapter, {
         from_address: sourceWalletTrimmed as `0x${string}`,
         to_address: toAddressTrimmed as `0x${string}`,
-        encrypted_amount: encryptedAmountTrimmed as `0x${string}`,
-        input_proof: inputProofTrimmed as `0x${string}`,
+        encrypted_amount: realEncryptedAmount as `0x${string}`,
+        input_proof: realInputProof as `0x${string}`,
         disclosure_data_id: effectiveDisclosureDataId as `0x${string}`,
         policy_hash: policyHash as `0x${string}`,
         anchor_hash: anchorHash as `0x${string}`,

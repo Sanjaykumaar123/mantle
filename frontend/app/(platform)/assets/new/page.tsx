@@ -362,14 +362,22 @@ export default function NewAssetPage() {
         throw new Error(`Asset anchor transaction reverted. Tx hash: ${anchorTxHash}`);
       }
 
+      const isBypassChain = TARGET_CHAIN_ID === 5003 || TARGET_CHAIN_ID === 31337;
+      const realEncryptedAmount = isBypassChain
+        ? `0x${initialSupplyBigInt.toString(16).padStart(64, "0")}`
+        : encryptedAmount.trim();
+      const realInputProof = isBypassChain
+        ? "0x"
+        : inputProof.trim();
+
       const issuanceTxHash = await writeContractAsync({
         address: runtimeContracts.confidentialRwaToken as Address,
         abi: getContractAbi("confidentialRwaToken"),
         functionName: "mint",
         args: [
           beneficiaryWalletTrimmed as Address,
-          encryptedAmount.trim() as `0x${string}`,
-          inputProof.trim() as `0x${string}`,
+          realEncryptedAmount as `0x${string}`,
+          realInputProof as `0x${string}`,
         ],
         chainId: TARGET_CHAIN_ID,
         gas: BigInt(900000),
